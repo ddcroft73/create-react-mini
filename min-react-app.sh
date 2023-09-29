@@ -257,7 +257,9 @@ function edit_package_json() {
 # START PROGRAM... 
 
 # check for command line arg. Should be a valid directory or . for cwd
-# get the input if any and assign it to a var
+# get the input if any and assign it to a var. I probably could have just
+# ade it so that it creates the app in the cwd if called without args, 
+# but . just feels familiar.
 if [[ -n "$1" ]]; then
     PROJECT_DIR="$1"
     if [[ "$PROJECT_DIR" == "." ]]; then
@@ -265,20 +267,21 @@ if [[ -n "$1" ]]; then
     fi
 else   
     echo "Usage: $0 <project_name>"
-    echo "Script will build a directory: <project_name> in the current working directory."
+    echo "Script will build the directory: <project_name> in the current working directory."
+    echo "Enter . to build the project in the cwd."
     echo "Or just enter a path and project name."
     exit 1
 fi
 
-# Set up project structure, do initial checks, install dependicies
+# Do initial checks, install dependicies, Set up project structure.
 check_and_install_jq
 install_react_and_dependencies
 create_directories_and_files
 
-# Add scripts to package.json
+# Add the commands to call the scripts to package.json. npm start, npm build
 edit_package_json
 
-# edit all the files needed to build the project
+# edit all the files needed to build the project. Can easily customize this if basic needs dictate.
 write_webpack_config_js
 write_babel_rc
 write_index_html
