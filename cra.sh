@@ -4,105 +4,125 @@
 # Any other dependencies can be installed by hand. 
 
 function write_index_html {
-    echo "<!DOCTYPE html>" >> public/index.html
-    echo '<html lang="en">' >> public/index.html
-    echo " <head>" >> public/index.html
-    echo '  <meta charset="UTF-8">' >> public/index.html
-    echo '  <meta name="viewport" content="width=device-width, initial-scale=1.0">' >> public/index.html 
-    echo '  <title>Minimilistic React App</title>' >> public/index.html
-    echo " </head>"  >> public/index.html
-    echo " <body>" >> public/index.html
-    echo '   <div id="root"></div>' >> public/index.html
-    echo " </body>" >> public/index.html
-    echo "</html>" >> public/index.html
+   cat << EOF > public/index.html
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+  <link rel="stylesheet" href="main.css">
+  <title>Minimilistic React App</title>
+ </head>
+ <body>
+   <div id="root"></div>
+   <script src="bundle.js"></script>
+ </body>
+</html>
+EOF
+
 }
 function  write_manifest_json {
-    # $1 == 
-    echo "" >> public/manifest.json 
-    echo "{" >> public/manifest.json 
-    echo '  "short_name": "short name",'  >> public/manifest.json 
-    echo '  "name": "project name",' >>public/manifest.json
-    echo '  "icons": [],' >> public/manifest.json
-    echo '  "start_url": ".",' >> public/manifest.json
-    echo '  "display": "standalone",' >> public/manifest.json
-    echo '  "theme_color": "#000000",' >> public/manifest.json
-    echo '  "background_color": "#ffffff"' >> public/manifest.json
-    echo '}' >> public/manifest.json
+   cat << EOF > public/manifest.json
+{
+  "short_name": "short name",
+  "name": "project name",
+  "icons": [],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
+EOF
+
 }
 function write_app_js {
-    # $1 == 
-    echo "" >> src/App.js
-    echo "import React from 'react';" >> src/App.js
-    echo "import styles from './App.css';" >> src/App.js
-    echo "" >> src/App.js
-    echo "function App() {" >> src/App.js
-    echo "   return <div className={styles.app}>Hello, React!</div>;" >> src/App.js
-    echo "}"  >> src/App.js
-    echo "" >> src/App.js
-    echo 'export default App;' >> src/App.js
+   cat << EOF > src/App.js
+import React from 'react';
+import './App.css';
+
+function App() {
+   return <div className="app">Hello, React!</div>;
+}
+
+export default App;
+EOF
 }
 function write_app_css {
-    echo "" >> src/App.css
-    echo '.app {' >> src/App.css
-    echo '    font-family: Arial, sans-serif;' >> src/App.css
-    echo '    color: blue;' >> src/App.css
-    echo '}' >> src/App.css
+   cat << EOF > src/App.css
+.app {
+    font-family: Arial, sans-serif;
+    color: blue;
+}
+EOF
 }
 function write_index_js {
-    echo '' >> src/index.js
-    echo "import React from 'react';" >> src/index.js
-    echo "import ReactDOM from 'react-dom';"  >> src/index.js
-    echo "import App from './App';"  >> src/index.js
-    echo ""  >> src/index.js
-    echo "ReactDOM.render(<App />, document.getElementById('root'));"  >> src/index.js
+   cat << EOF > src/index.js
+import React from 'react';
+import ReactDOM from "react-dom/client";
+import App from './App';
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+    <React.StrictMode>
+        <App />
+    </React.StrictMode>
+);
+EOF
 }
 function write_webpack_config_js {
-    echo "" >> webpack.config.js
-    echo "const path = require('path');" >> webpack.config.js
-    echo "const MiniCssExtractPlugin = require('mini-css-extract-plugin');" >> webpack.config.js
-    echo "" >> webpack.config.js
-    echo "module.exports = {" >> webpack.config.js
-    echo "  entry: './src/index.js'," >> webpack.config.js
-    echo "  output: {" >> webpack.config.js
-    echo "    path: path.resolve(__dirname, 'build')," >> webpack.config.js
-    echo "    filename: 'bundle.js'" >> webpack.config.js
-    echo "  }," >> webpack.config.js
-    echo "  module: {" >> webpack.config.js
-    echo "    rules: [" >> webpack.config.js
-    echo "      {" >> webpack.config.js
-    echo "        test: /\.(js|jsx)$/," >> webpack.config.js
-    echo "        exclude: /node_modules/," >> webpack.config.js
-    echo "        use: {" >> webpack.config.js
-    echo "          loader: 'babel-loader'," >> webpack.config.js
-    echo "          options: {" >> webpack.config.js
-    echo "            presets: ['@babel/preset-env', '@babel/preset-react']" >> webpack.config.js
-    echo "          }" >> webpack.config.js
-    echo "        }" >> webpack.config.js
-    echo "      }," >> webpack.config.js
-    echo "      {" >> webpack.config.js
-    echo "        test: /\.css$/," >> webpack.config.js
-    echo "        use: [MiniCssExtractPlugin.loader, {" >> webpack.config.js
-    echo "          loader: 'css-loader'," >> webpack.config.js
-    echo "          options: {" >> webpack.config.js
-    echo "            modules: true" >> webpack.config.js
-    echo "          }" >> webpack.config.js
-    echo "        }]" >> webpack.config.js
-    echo "      }" >> webpack.config.js
-    echo "    ]" >> webpack.config.js
-    echo "  }," >> webpack.config.js
-    echo "  plugins: [new MiniCssExtractPlugin()]," >> webpack.config.js
-    echo "  devServer: {" >> webpack.config.js
-    echo "    contentBase: path.join(__dirname, 'build')," >> webpack.config.js
-    echo "    compress: true," >> webpack.config.js
-    echo "    port: 3000" >> webpack.config.js
-    echo "  }" >> webpack.config.js
-    echo "};" >> webpack.config.js
+    cat << EOF > webpack.config.js
+const path = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+module.exports = {
+  mode: "development",  
+  entry: './src/index.js',
+  output: {
+    path: path.resolve(__dirname, 'build'),
+    filename: 'bundle.js'
+  },
+  module: {
+    rules: [
+      {
+        test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env', '@babel/preset-react']
+          }
+        }
+      },
+      {
+        test: /\.css$/,
+        use: [MiniCssExtractPlugin.loader, {
+          loader: 'css-loader',
+          options: {
+            modules: false
+          }
+        }]
+      }
+    ]
+  },
+  plugins: [new MiniCssExtractPlugin()],
+  devServer: {
+    static: {
+        directory: path.join(__dirname, 'public'),
+    },
+    compress: true,
+    port: 3000
+    }
+};
+EOF
 }
 function write_babel_rc {
-    echo "" >> .babelrc
-    echo '{' >> .babelrc
-    echo '  "presets": ["@babel/preset-env", "@babel/preset-react"]' >> .babelrc
-    echo '}' >> .babelrc
+    cat << EOF > .babelrc
+{
+  "presets": ["@babel/preset-env", "@babel/preset-react"]
+}
+EOF
+
 }
 
 # check for command line arg. Should be a valid directory or . for cwd
