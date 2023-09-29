@@ -3,6 +3,16 @@
 # bash script that creates a minimalistic React app. Just what you need to run React and react-router-dom.
 # Any other dependencies can be installed by hand. 
 
+ function check_and_install_jq {
+    # Check if jq is installed
+    if ! command -v jq &> /dev/null; then
+        echo "jq is not installed. Installing now..."
+        sudo apt-get update
+        sudo apt-get install -y jq
+    else
+        echo "jq is already installed."
+    fi
+}
 function write_index_html {
    cat << EOF > public/index.html
 <!DOCTYPE html>
@@ -122,8 +132,28 @@ function write_babel_rc {
   "presets": ["@babel/preset-env", "@babel/preset-react"]
 }
 EOF
-
 }
+function install_react_and_dependencies {
+    # Install React and ReactDOM
+    npm install react react-dom react-router-dom
+    # Install Webpack, Babel, and loaders
+    npm install --save-dev webpack webpack-cli webpack-dev-server @babel/core @babel/preset-env @babel/preset-react babel-loader css-loader style-loader mini-css-extract-plugin
+    npm install axios 
+}
+function create_directories_and_files {      
+    # Create a new directory and initialize it
+    mkdir $PROJECT_DIR
+    cd $PROJECT_DIR
+    npm init -y
+
+    # Create basic directory structure
+    mkdir public src src/components
+    touch public/index.html public/manifest.json src/App.js src/index.js src/App.css src/components/readme.md TODO.txt readme.md 
+    touch webpack.config.js
+    touch .babelrc
+}
+
+# START SCRIPT 
 
 # check for command line arg. Should be a valid directory or . for cwd
 # get the input if any and assign it to a var
@@ -139,27 +169,13 @@ else
     exit 1
 fi
 
-# Create a new directory and initialize it
-mkdir $PROJECT_DIR
-cd $PROJECT_DIR
-npm init -y
-
-# Install React and ReactDOM
-npm install react react-dom react-router-dom
-
-# Install Webpack, Babel, and loaders
-npm install --save-dev webpack webpack-cli webpack-dev-server @babel/core @babel/preset-env @babel/preset-react babel-loader css-loader style-loader mini-css-extract-plugin
-
-npm install axios 
-# Create basic directory structure
-mkdir public src src/components
-touch public/index.html public/manifest.json src/App.js src/index.js src/App.css src/components/readme.md TODO.txt readme.md 
-touch webpack.config.js
-touch .babelrc
-
+check_and_install_jq
+install_react_and_dependencies
+create_directories_and_files
 # Add scripts to package.json
 jq '.scripts += {"start": "webpack serve", "build": "webpack --mode production"}' package.json > temp.json && mv temp.json package.json
 
+# edit all the files needed to build the project
 write_webpack_config_js
 write_babel_rc
 write_index_html
