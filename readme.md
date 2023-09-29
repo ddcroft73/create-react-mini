@@ -41,4 +41,9 @@ This will serve your app on `http://localhost:3000`.
 
 ## 🌟 Future Enhancements
 
-If not already done, I'm in the process of adding routing to `App.js` for a better starting point. I'll also introduce some basic components like `Box`, `Button`, `Paper`, and more to kickstart your app development.
+If not already done,  I'll  introduce some basic components like `Box`, `Button`, `Paper`, and more to kickstart the app development.
+I planto beef up the componets to demo the `<Link>` component and the use of `useNavigate`.
+
+## Notes:
+
+As is, you can test it by appending `/about` to the URL in the browser to go to about, and then `/` to go back, or the `back` button. 
