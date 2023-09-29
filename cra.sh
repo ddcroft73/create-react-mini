@@ -48,21 +48,34 @@ EOF
 }
 function write_app_js {
    cat << EOF > src/App.js
-import React from 'react';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
-function App() {
-   return <div className="app">Hello, React!</div>;
-}
+// Import your components here
+import Home from "./components/Home";
+import About from "./components/About"; // Just an example
+import './App.css'
+
+const App = () => {
+    return (
+        <Router>
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/about" element={<About />} /> // Just an example
+            </Routes>
+        </Router>
+    );
+};
 
 export default App;
 EOF
 }
 function write_app_css {
    cat << EOF > src/App.css
-.app {
-    font-family: Arial, sans-serif;
-    color: blue;
+body {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New';
+    color: rgb(60, 64, 32);
+    background-color: rgb(163, 140, 140);
 }
 EOF
 }
@@ -121,7 +134,8 @@ module.exports = {
         directory: path.join(__dirname, 'public'),
     },
     compress: true,
-    port: 3000
+    port: 3000,
+        historyApiFallback: true
     }
 };
 EOF
@@ -131,6 +145,80 @@ function write_babel_rc {
 {
   "presets": ["@babel/preset-env", "@babel/preset-react"]
 }
+EOF
+}
+function write_Box_js {
+    cat << EOF > src/components/elements/Box.js
+import React from "react";
+
+const Box = ({ children, style }) => {
+    
+    const defaultStyle = {
+        width: 'auto',
+        height: 'auto',
+        border: '1px solid black',
+        borderRadius: '8px',
+        padding: 10,
+    };
+
+    return (
+        <div style={{ ...defaultStyle, ...style }}>
+            {children}
+        </div>
+    );
+}
+
+export default Box;
+EOF
+}
+function write_Home_js {
+    cat << EOF > src/components/Home.js
+import Box from "./elements/Box";
+import React from "react";
+
+function Home() {
+    return (
+        <Box
+            style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                marginTop: "50px",
+            }}
+        >
+            <Box>
+                <h1>Home</h1>
+            </Box>
+        </Box>
+    );
+};
+
+export default Home;
+EOF
+}
+function write_About_js {
+    cat << EOF > src/components/About.js
+import Box from "./elements/Box";
+import React from "react";
+
+function About() {
+    return (
+        <Box
+            style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                marginTop: "50px",
+            }}
+        >
+            <Box>
+                <h1>About</h1>
+            </Box>
+        </Box>
+    );
+};
+
+export default About;
 EOF
 }
 function install_react_and_dependencies {
@@ -147,8 +235,18 @@ function create_directories_and_files {
     npm init -y
 
     # Create basic directory structure
-    mkdir public src src/components
-    touch public/index.html public/manifest.json src/App.js src/index.js src/App.css src/components/readme.md TODO.txt readme.md 
+    mkdir public src src/components src/components/elements
+
+    # Files
+    touch public/index.html 
+    touch public/manifest.json 
+    touch src/App.js src/index.js src/App.css 
+    touch src/components/readme.md 
+    touch src/components/elements/Box.js
+    touch src/components/Home.js src/components/About.js
+
+    # files in project root
+    touch TODO.txt readme.md 
     touch webpack.config.js
     touch .babelrc
 }
@@ -183,3 +281,6 @@ write_manifest_json
 write_app_js
 write_app_css
 write_index_js
+write_Box_js
+write_Home_js
+write_About_js
