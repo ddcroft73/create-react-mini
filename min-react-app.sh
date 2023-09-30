@@ -82,10 +82,10 @@ EOF
 function write_index_js {
    cat << EOF > src/index.js
 import React from 'react';
-import ReactDOM from "react-dom/client";
+import { createRoot } from "react-dom/client";
 import App from './App';
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+const root = createRoot(document.getElementById("root"));
 root.render(
     <React.StrictMode>
         <App />
@@ -99,7 +99,6 @@ const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
-  mode: "development",  
   entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, 'build'),
@@ -241,17 +240,16 @@ function create_directories_and_files {
     touch public/index.html 
     touch public/manifest.json 
     touch src/App.js src/index.js src/App.css 
-    touch src/components/readme.md 
     touch src/components/elements/Box.js
     touch src/components/Home.js src/components/About.js
 
     # files in project root
     touch TODO.txt readme.md 
-    touch webpack.config.js
+    touch webpack.config.js 
     touch .babelrc
 }
 function edit_package_json() {
-    jq '.scripts += {"start": "webpack serve", "build": "webpack --mode production"}' package.json > temp.json && mv temp.json package.json
+    jq '.scripts += {"start": "webpack serve --mode development", "build": "webpack --mode production"}' package.json > temp.json && mv temp.json package.json
 }
 
 # START PROGRAM... 

@@ -42,7 +42,7 @@ This will serve your app on `http://localhost:3000`.
 ## 🌟 Future Enhancements
 
 If not already done,  I'll  introduce some basic components like `Box`, `Button`, `Paper`, and more to kickstart the app development.
-I planto beef up the componets to demo the `<Link>` component and the use of `useNavigate`.
+I plan to beef up the components to demo the `<Link>` component and the use of `useNavigate`.
 
 ## Notes:
 
